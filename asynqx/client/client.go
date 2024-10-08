@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 
-	"asynq-app/config"
+	"tx-status-server/config"
 
 	"github.com/hibiken/asynq"
 	"github.com/pkg/errors"

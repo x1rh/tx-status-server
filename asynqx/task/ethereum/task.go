@@ -1,36 +1,35 @@
-package biz2
+package ethereum
 
 import (
-	"asynq-app/appctx"
 	"context"
 	"encoding/json"
 	"log/slog"
 	"math/rand"
 	"time"
+	"tx-status-server/appctx"
 
 	"github.com/hibiken/asynq"
 )
 
-type Task2 struct {
+type Task1 struct {
 	Id  int    `json:"id"`
 	App string `json:"app"`
 }
 
-func HandleTask2(ctx *appctx.Context) asynq.HandlerFunc {
+func HandleEthereumTxStatusTask(ctx *appctx.Context) asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
-		var t Task2
-
 		if time.Now().UTC().Unix()%2 == 0 && rand.Int()%2 == 0 {
 			panic("random panic task2")
 		}
 
+		var t Task1
 		err := json.Unmarshal(task.Payload(), &t)
 		if err != nil {
 			slog.Error("fail to unmarshal task", slog.Any("err", err))
 			return err
 		}
 
-		slog.Info("handle task2", slog.Any("task2", t))
+		slog.Info("handle task1", slog.Any("task1", t))
 		return nil
 	}
 }

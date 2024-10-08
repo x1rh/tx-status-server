@@ -8,10 +8,11 @@ import (
 	"log/slog"
 	"time"
 
-	"asynq-app/appctx"
-	"asynq-app/task"
-	"asynq-app/task/biz1"
-	"asynq-app/task/biz2"
+	"tx-status-server/appctx"
+	"tx-status-server/asynqx/task"
+	"tx-status-server/asynqx/task/ethereum"
+	"tx-status-server/asynqx/task/solana"
+	"tx-status-server/asynqx/task/ton"
 
 	"github.com/go-redis/redis"
 	"github.com/hibiken/asynq"
@@ -58,8 +59,9 @@ func New(ctx *appctx.Context) (*Server, error) {
 }
 
 func (svr *Server) Start() {
-	svr.HandleFunc(task.TypeTask1, biz1.HandleTask1(svr.appctx))
-	svr.HandleFunc(task.TypeTask2, biz2.HandleTask2(svr.appctx))
+	svr.HandleFunc(task.TypeTxStatusEthereum, ethereum.HandleEthereumTxStatusTask(svr.appctx))
+	svr.HandleFunc(task.TypeTxStatusSolana, solana.HandleSolanaTxStatusTask(svr.appctx))
+	svr.HandleFunc(task.TypeTxStatusTon, ton.HandleTonTxStatusTask(svr.appctx))
 
 	slog.Info("asynq server start...")
 	if err := svr.server.Run(svr.mux); err != nil {

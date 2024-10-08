@@ -5,7 +5,7 @@ services:
     image: redis:7.0.0
     ports:
       - "6379:6379"
-    volume:
+    volumes:
       - redis_data:/data
 
   app-main:
