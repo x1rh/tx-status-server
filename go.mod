@@ -10,6 +10,9 @@ require (
 	github.com/hibiken/asynq v0.24.1
 	github.com/pkg/errors v0.9.1
 	github.com/xssnick/tonutils-go v1.10.2
+	github.com/swaggo/swag v1.8.7
+    github.com/swaggo/gin-swagger v1.2.0
+    github.com/swaggo/gin-swagger/swaggerFiles v1.2.0
 )
 
 require (
