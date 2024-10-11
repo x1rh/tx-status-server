@@ -1,6 +1,8 @@
 package database
 
 import (
+	"tx-status-server/database/model"
+
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -15,9 +17,8 @@ func InitDB() error {
 
 func Migration() error {
 	return DB.AutoMigrate(
-		&model.EthTxHashStatus{}, 
-		&model.SolTxHashStatus{}, 
+		&model.EthTxHashStatus{},
+		&model.SolTxHashStatus{},
 		&model.TonTxHashStatus{},
 	)
 }
-

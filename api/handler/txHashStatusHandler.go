@@ -26,7 +26,7 @@ import (
 // @Router /tx/status [get]
 func getTxStatusHandler(c *gin.Context) {
 	chainName := c.Query("chainName")
-	tx := c.Query("tx")
+	txHash := c.Query("tx")
 
 	if chainName == "" || txHash == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "chainName and txHash are required"})
@@ -36,7 +36,6 @@ func getTxStatusHandler(c *gin.Context) {
 	// 处理逻辑
 	slog.Infof("Getting status for chain: %s, txHash: %s", chainName, txHash)
 }
-
 
 // @Summary Create Transaction Status
 // @Description Create a new transaction status for a specific chain
