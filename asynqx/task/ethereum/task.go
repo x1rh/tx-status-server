@@ -17,7 +17,7 @@ type EthTxStatusQueryTask struct {
 	Status  int    `json:"status"`
 }
 
-func HandleEthereumTxStatusTask(ctx *appctx.Context) asynq.HandlerFunc {
+func HandleEthereumTxStatusTask(_appctx *appctx.Context) asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
 		var t EthTxStatusQueryTask
 		err := json.Unmarshal(task.Payload(), &t)
@@ -26,7 +26,7 @@ func HandleEthereumTxStatusTask(ctx *appctx.Context) asynq.HandlerFunc {
 			return err
 		}
 
-		receipt, err := ctx.EthClientHub.WithChainID(t.ChainId).TransactionReceipt(ctx, common.HexToHash(t.TxHash))
+		receipt, err := _appctx.EthClientHub.MustWithChainID(t.ChainId).TransactionReceipt(ctx, common.HexToHash(t.TxHash))
 		if err != nil {
 			// transaction maybe still pending
 			slog.Error("fail to check receipt", slog.Any("err", err))

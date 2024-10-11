@@ -70,7 +70,7 @@ func TestTon(t *testing.T) {
 	// lt := uint64(26725328000003)
 	// txHash := "746AA9D08540713EEC53646655ED216F5CACCC6CDA042D6BD865FE6B8A2C4C1C"
 
-	transactions := make(chan *tlb.Transaction)
+	// transactions := make(chan *tlb.Transaction)
 
 	// it is a blocking call, so we start it asynchronously
 	// go api.SubscribeOnTransactions(context.Background(), treasuryAddress, lt-1, transactions)
@@ -114,41 +114,6 @@ func TestTon(t *testing.T) {
 		} else {
 			fmt.Printf("exitcode=%d\n", pv.Details.ExitCode)
 		}
-	}
-
-	fmt.Println("======================")
-
-	// listen for new transactions from channel
-
-	_ = transactions
-
-	for tx := range transactions {
-		// only internal messages can increase the balance
-		// if tx.IO.In != nil && tx.IO.In.MsgType == tlb.MsgTypeInternal {
-		// 	ti := tx.IO.In.AsInternal()
-		// 	src := ti.SrcAddr
-
-		// 	// verify that event sender is our jetton wallet
-		// 	if ti.SrcAddr.Equals(treasuryJettonWallet.Address()) {
-		// 		var transfer jetton.TransferNotification
-		// 		if err = tlb.LoadFromCell(&transfer, ti.Body.BeginParse()); err == nil {
-		// 			// convert decimals to 6 for USDT (it can be fetched from jetton details too), default is 9
-		// 			amt := tlb.MustFromNano(transfer.Amount.Nano(), 6)
-
-		// 			// reassign sender to real jetton sender instead of its jetton wallet contract
-		// 			src = transfer.Sender
-		// 			log.Println("received", amt.String(), "USDT from", src.String())
-		// 		}
-		// 	}
-
-		// 	// show received ton amount
-		// 	log.Println("received", ti.Amount.String(), "TON from", src.String())
-		// }
-
-		// update last processed lt and save it in db
-
-		// lastProcessedLT = tx.LT
-		fmt.Printf("%+v\n", tx)
 	}
 
 	// it can happen due to none of available liteservers know old enough state for our address
