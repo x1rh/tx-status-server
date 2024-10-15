@@ -2,17 +2,19 @@ package ton
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"log"
 	"testing"
 
 	"github.com/xssnick/tonutils-go/address"
 	"github.com/xssnick/tonutils-go/liteclient"
-	"github.com/xssnick/tonutils-go/tlb"
 	"github.com/xssnick/tonutils-go/ton"
 )
 
 func TestTon(t *testing.T) {
+	_ = ""
 	client := liteclient.NewConnectionPool()
 
 	testnetURL := "https://ton-blockchain.github.io/testnet-global.config.json"
@@ -45,6 +47,7 @@ func TestTon(t *testing.T) {
 	// address on which we are accepting payments
 
 	myWalletAddress := "UQCwxyBrDh2FL3MycXF0-XgInMp1aMbND_1SIggGS2cVjAlV" // my wallet
+	// myWalletAddress := "0QAsR34m_SDd4fbk-vJCwUWNK17AVuRf152vtbXV9C9Tizlf" // my wallet
 	// myWalletAddress := "EQCSES0TZYqcVkgoguhIb8iMEo4cvaEwmIrU5qbQgnN8fmvP" // tester giver bot
 
 	// treasuryAddress := address.MustParseAddr("EQAYqo4u7VF0fa4DPAebk4g9lBytj2VFny7pzXR0trjtXQaO")
@@ -87,6 +90,9 @@ func TestTon(t *testing.T) {
 	// 	return
 	// }
 
+	fmt.Printf("acc.LastTxLt: %v\n", acc.LastTxLT)
+	fmt.Printf("acc.LastTxHash: %v\n", hex.EncodeToString(acc.LastTxHash))
+
 	transactionList, err := api.ListTransactions(context.Background(), treasuryAddress, 15, acc.LastTxLT, acc.LastTxHash)
 	if err != nil {
 		// In some cases you can get error:
@@ -98,22 +104,28 @@ func TestTon(t *testing.T) {
 
 	for _, tx := range transactionList {
 		fmt.Printf("transaction: %+v\n", tx)
-		dv, ok := tx.Description.Description.(tlb.TransactionDescriptionOrdinary)
-		if !ok {
-			fmt.Println("not a tlb.TransactionDescriptionOrdinary")
-		}
-		fmt.Printf("description: %+v\n", dv)
+		fmt.Printf("base64 tx hash: %s\n", base64.StdEncoding.EncodeToString(tx.Hash))
+		fmt.Printf("tx hash: %s\n", hex.EncodeToString(tx.Hash))
 
-		if dv.Aborted {
-			fmt.Println("transaction is aborted")
-		}
+		/*
+			dv, ok := tx.Description.Description.(tlb.TransactionDescriptionOrdinary)
+			if !ok {
+				fmt.Println("not a tlb.TransactionDescriptionOrdinary")
+			}
+			fmt.Printf("description: %+v\n", dv)
 
-		pv, ok := dv.ComputePhase.Phase.(tlb.ComputePhaseVM)
-		if !ok {
-			fmt.Println("not a tlb.ComputePhaseVM")
-		} else {
-			fmt.Printf("exitcode=%d\n", pv.Details.ExitCode)
-		}
+			if dv.Aborted {
+				fmt.Println("transaction is aborted")
+			}
+
+			pv, ok := dv.ComputePhase.Phase.(tlb.ComputePhaseVM)
+			if !ok {
+				fmt.Println("not a tlb.ComputePhaseVM")
+			} else {
+				fmt.Printf("exitcode=%d\n", pv.Details.ExitCode)
+			}
+
+		*/
 	}
 
 	// it can happen due to none of available liteservers know old enough state for our address
