@@ -1,0 +1,14 @@
+RedisConfig:
+  Addr: "0.0.0.0:63790"
+  Password: ""
+  Username: ""
+  DB: 0 
+  EnableTls: false
+ChainConfig:
+  - ChainName: "ethereum"
+    ChainId: 1
+    URL: ""
+  - ChainName: "ethereum-sepolia"
+    ChainId: 11155111
+    URL: ""
+

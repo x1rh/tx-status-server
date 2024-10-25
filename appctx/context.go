@@ -17,8 +17,9 @@ type Context struct {
 
 func New(c config.Config) *Context {
 	return &Context{
-		Config:     c,
-		TaskClient: client.New(c),
+		Config:       c,
+		TaskClient:   client.New(c),
+		EthClientHub: &clienthub.ClientHub{},
 	}
 }
 

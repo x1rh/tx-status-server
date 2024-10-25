@@ -26,7 +26,7 @@ func HandleEthereumTxStatusTask(_appctx *appctx.Context) asynq.HandlerFunc {
 			return err
 		}
 
-		receipt, err := _appctx.EthClientHub.MustWithChainID(t.ChainId).TransactionReceipt(ctx, common.HexToHash(t.TxHash))
+		receipt, err := _appctx.EthClientHub.MustWithChainID(t.ChainId).Client.TransactionReceipt(ctx, common.HexToHash(t.TxHash))
 		if err != nil {
 			// transaction maybe still pending
 			slog.Error("fail to check receipt", slog.Any("err", err))

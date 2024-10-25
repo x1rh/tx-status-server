@@ -7,6 +7,7 @@ import (
 	"time"
 	"tx-status-server/appctx"
 	"tx-status-server/asynqx/task"
+	ethtask "tx-status-server/asynqx/task/ethereum"
 	"tx-status-server/constants"
 	"tx-status-server/sdk/types"
 
@@ -34,7 +35,7 @@ func getTxStatusHandler(c *gin.Context) {
 	}
 
 	// 处理逻辑
-	slog.Infof("Getting status for chain: %s, txHash: %s", chainName, txHash)
+	slog.Info(fmt.Sprintf("Getting status for chain: %s, txHash: %s", chainName, txHash))
 }
 
 // @Summary Create Transaction Status
@@ -69,6 +70,12 @@ func postTxStatusHandler(c *gin.Context) {
 	case constants.ChainKindTon:
 		_, err := appctx.TaskClient.Enqueue(
 			task.TypeTxStatusTon,
+			ethtask.EthTxStatusQueryTask{
+				Id:      0,
+				ChainId: 0,
+				TxHash:  "",
+				Status:  0,
+			},
 			asynq.TaskID(fmt.Sprintf("%s:%s", req.ChainName, req.Tx)),
 			asynq.MaxRetry(32),
 			asynq.Timeout(10*time.Second),
